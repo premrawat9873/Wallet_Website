@@ -23,6 +23,8 @@ export default function Signup({Url}){
       firstName,
       lastName
     });
+    localStorage.setItem("token", res.data.token);
+    // navigate("/dashboard");
 
   } catch (err) {
     console.error("Signup failed:", err);
