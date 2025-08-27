@@ -15,6 +15,10 @@ export default function DropdownButton() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+    const handleLogout = () => {
+    localStorage.removeItem("token");  // clear token
+    navigate("/signin");               // redirect to signin
+  };
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
@@ -54,7 +58,7 @@ export default function DropdownButton() {
             </button>
             <button
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-              onClick={() => alert("Logout clicked")}
+              onClick={handleLogout}
             >
             Logout
             </button>

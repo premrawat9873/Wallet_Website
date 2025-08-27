@@ -6,14 +6,17 @@ const {	User,Account} = require("../database/db")
 
 
 router.get("/balance", authMiddleware, async (req, res) => {
-    const account = await Account.findOne({
-        userId: req.userId
-    });
-
-    res.json({
-        balance: account.balance
-    })
+    const account = await Account.findOne({ userId: req.userId });
+    if (!account) {
+        return res.status(404).json({ message: "Account not found" });
+    }
+    res.json({ balance: account.balance });
 });
+
+router.get("/test", (req, res) => {
+  res.send("account router works!");
+});
+
 
 
 router.post("/transfer",authMiddleware,async(req,res)=>{

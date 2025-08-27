@@ -32,7 +32,7 @@ export default function Signup({ Url }) {
       console.log("Signup success:", res.data);
 
       // ✅ Redirect to dashboard after signup
-      navigate("/dashboard");
+      navigate("/dashboard", { state: { user: res.data.user } });
 
     } catch (err) {
       console.error("Signup failed:", err);

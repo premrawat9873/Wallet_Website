@@ -26,9 +26,10 @@ export default function Signin({ url }) {
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
       }
-
-      // redirect after success
-      navigate("/dashboard");
+if (res.data.token || res.data.tokken || res.data.Tokken) {
+  localStorage.setItem("token", res.data.token || res.data.tokken || res.data.Tokken);
+  navigate("/dashboard");
+}
 
     } catch (err) {
       console.error("Signin failed:", err);

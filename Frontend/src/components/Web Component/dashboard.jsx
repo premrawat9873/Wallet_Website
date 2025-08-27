@@ -1,19 +1,66 @@
 import DropdownButton from "../dropdown";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Person from "../person";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
+  const [balance, setBalance] = useState(null);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    axios.get("http://localhost:3000/api/v1/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      });
+  }, [navigate]);
+  
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  axios
+    .get("http://localhost:3000/api/v1/account/balance", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => setBalance(res.data.balance))
+    .catch((err) => {
+      console.error("Balance fetch failed:", err);
+      setBalance(null);
+    });
+}, []);
+
+
 
   return (
     <div className="flex flex-col w-full h-full bg-[url('/src/assets/download.jpg')] bg-cover items-center">
       {/* Header */}
-      <div className="flex justify-between items-center mt-3 pl-5 pb-5 bg-zinc-700/50 backdrop-blur-md rounded-lg w-470 h-16 ">
+      <div className="flex justify-between items-center mt-5 px-5 pb-5 bg-zinc-700/50 backdrop-blur-md rounded-lg w-full max-w-[1450px] h-16 mx-auto relative z-40">
+
         <div>
           <div className="text-3xl text-white mt-2">Payment App</div>
         </div>
         <div className="flex justify-end pr-10 items-center">
-          <div className="pr-5 pt-3 text-white">Hello, user</div>
+          <div className="pr-5 pt-3 text-white">Hello, {user ? user.firstName : "Loading..."}</div>
           <div className="pt-4">
             <DropdownButton />
           </div>
@@ -23,7 +70,7 @@ export default function Dashboard() {
       {/* Balance Card */}
       <div className="w-350 h-30 bg-zinc-700/50 backdrop-blur-md mt-10 rounded-lg">
         <div className="text-white text-4xl pl-5 pt-5">Your Balance</div>
-        <div className="text-white text-2xl pl-5 pt-2">$ 10000</div>
+        <div className="text-white text-2xl pl-5 pt-2">{balance !== null ? `₹ ${balance.toFixed(2)}` : "Loading..."}</div>
       </div>
 
       {/* Search Bar */}
