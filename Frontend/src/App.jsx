@@ -1,28 +1,29 @@
-// App.jsx
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { tokenState } from "./components/atoms/tokenAtom";
 import Dashboard from "./components/Web Component/dashboard";
 import Signin from "./components/Web Component/signin";
 import Signup from "./components/Web Component/signup";
 import Payment from "./components/Web Component/payment";
 
 function App() {
-  const navigate = useNavigate();
-  //hello
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
+  const token = useRecoilValue(tokenState);
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/signin" />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/payment" element={<Payment />} />
+      {!token ? (
+        <>
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/signin" />} />
+        </>
+      ) : (
+        <>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </>
+      )}
     </Routes>
   );
 }

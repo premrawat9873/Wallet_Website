@@ -1,5 +1,6 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue,useSetRecoilState } from "recoil";
 import Heading from "../heading";
+import { tokenState } from "../atoms/tokenAtom"; // Import tokenState
 import Subheading from "../subheading";
 import InputField from "../input";
 import Button from "../button";
@@ -11,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 export default function Signin({ url }) {
   const email = useRecoilValue(emailState);
   const password = useRecoilValue(passwordState);
+  const setToken = useSetRecoilState(tokenState); // Add this line
   const navigate = useNavigate();
 
   const handleSignin = async () => {
@@ -20,17 +22,12 @@ export default function Signin({ url }) {
         password
       });
 
-      console.log("Signin success:", res.data);
-
-      // store token if returned
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
+      if (res.data.token || res.data.tokken || res.data.Tokken) {
+        const token = res.data.token || res.data.tokken || res.data.Tokken;
+        localStorage.setItem("token", token);
+        setToken(token); // This is the key line you're missing!
+        navigate("/dashboard");
       }
-if (res.data.token || res.data.tokken || res.data.Tokken) {
-  localStorage.setItem("token", res.data.token || res.data.tokken || res.data.Tokken);
-  navigate("/dashboard");
-}
-
     } catch (err) {
       console.error("Signin failed:", err);
       alert("Signin failed, please check your credentials");

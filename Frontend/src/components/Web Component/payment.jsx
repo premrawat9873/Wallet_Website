@@ -8,7 +8,10 @@ export default function Payment() {
   const [amount, setAmount] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-  const user = location.state.user;
+  const user = location.state?.user;
+  if (!user) {
+  return <div className="text-white">No user selected for payment.</div>;
+  }
 
   return (
     <div className="relative min-h-screen w-screen">
@@ -24,7 +27,7 @@ export default function Payment() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>  
           <div className="flex items-center gap-5">
-            <div className="text-white">Hello, user</div>
+            <div className="text-white">Hello, {user.firstName}</div>
             <DropdownButton />
           </div>
         </div>
