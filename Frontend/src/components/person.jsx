@@ -1,90 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Person() {
     const navigate = useNavigate();
-
-    const [person] = useState([
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Prem",
-            lastName: "Rawat"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Arunabha",
-            lastName: "Paul"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Prem",
-            lastName: "Rawat"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Arunabha",
-            lastName: "Paul"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Prem",
-            lastName: "Rawat"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Arunabha",
-            lastName: "Paul"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Prem",
-            lastName: "Rawat"
-        },
-        {
-            username: "premrawat9873@gmail.com",
-            password: "Prem@9873",
-            firstName: "Ayush",
-            lastName: "Lal"
-        },
-    ]);
+    const [persons, setPersons] = useState([]);
+    useEffect(() => {
+        axios.get("http://localhost:3000/api/v1/users/bulk")
+            .then((res) => {
+                setPersons(res.data.user);
+            })
+            .catch((err) => {
+                console.error("Error fetching users:", err);
+            });
+    }, []);
+    
 
     const handlePaymentClick = (user) => {
         navigate("/payment", { state: { user } });
@@ -92,7 +23,7 @@ export default function Person() {
 
     return (
         <div className="flex flex-col items-center">
-            {person.map((p, index) => (
+            {persons.map((p, index) => (
                 <div
                     key={index}
                     className="flex justify-between items-center h-20 w-350 pl-10 pr-5 mt-5 bg-zinc-700/50 backdrop-blur-md rounded-2xl"
