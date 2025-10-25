@@ -55,7 +55,7 @@ export default function Dashboard() {
           <div className="flex justify-end pr-10 items-center">
             <div className="pr-5 pt-3 text-white">Hello, {user ? user.firstName : "Loading..."}</div>
             <div className="pt-4">
-              <DropdownButton />
+              <DropdownButton user={user} />
             </div>
           </div>
         </div>
