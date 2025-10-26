@@ -1,17 +1,44 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Heading from "../heading";
 import Button from "../button";
 import DropdownButton from "../dropdown";
 
+const capitalize = (s) => {
+  if (!s) return "";
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+};
+
 export default function Payment() {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [sender, setSender] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const user = location.state?.user;
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+    axios
+      .get("http://localhost:3000/api/v1/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setSender(res.data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      });
+  }, [navigate]);
 
   if (!user) {
     return <div className="text-white">No user selected for payment.</div>;
@@ -57,6 +84,13 @@ export default function Payment() {
     }
   };
 
+  const senderFirst = capitalize(sender?.firstName);
+  const receiverFirst = capitalize(user?.firstName);
+  const receiverLast = capitalize(user?.lastName);
+  const receiverInitials =
+    (user?.firstName?.charAt(0) || "").toUpperCase() +
+    (user?.lastName?.charAt(0) || "").toUpperCase();
+
   return (
     <div className="relative min-h-screen w-screen">
       {/* Background */}
@@ -79,8 +113,8 @@ export default function Payment() {
           </svg>
 
           <div className="flex items-center gap-5">
-            <div className="text-white">Hello, {user.firstName}</div>
-            <DropdownButton />
+            <div className="text-white">Hello, {senderFirst}</div>
+            <DropdownButton user={sender} />
           </div>
         </div>
 
@@ -92,11 +126,11 @@ export default function Payment() {
             </div>
 
             <button className="text-black text-2xl w-20 h-20 rounded-full bg-white flex items-center justify-center">
-              {user.firstName[0].toUpperCase() + user.firstName[1].toUpperCase()}
+              {receiverInitials || (receiverFirst.charAt(0) || "")}
             </button>
 
             <div className="flex flex-col w-full mt-4 gap-3">
-              <div className="text-white text-lg">{user.firstName} {user.lastName}</div>
+              <div className="text-white text-lg">{receiverFirst} {receiverLast}</div>
               <div className="text-white text-lg">Amount (in INR)</div>
               <input
                 type="number"

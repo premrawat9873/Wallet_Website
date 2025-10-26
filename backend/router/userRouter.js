@@ -97,23 +97,30 @@ router.put("/update",authMiddleware,async(req,res)=>{
     })
 })
 
-router.get("/bulk", async (req, res) => {
-
-    // || "" MEANS IF USER DIDNOT GIVE ANY INPUT IT WILL SHOW DATA OF ALL THE USERS
+router.get("/bulk", authMiddleware, async (req, res) => {
+    // || "" MEANS IF USER DIDNOT GIVE ANY INPUT IT WILL SHOW DATA OF ALL THE USERS (except current user)
     const filter = req.query.filter || "";
 
     const users = await User.find({
-        $or: [{
-            firstName: {
-                "$regex": filter,
-                $options: "i" // case-insensitive
+        $and: [
+            { _id: { $ne: req.userId } }, // exclude the logged-in user
+            {
+                $or: [
+                    {
+                        firstName: {
+                            "$regex": filter,
+                            $options: "i" // case-insensitive
+                        }
+                    },
+                    {
+                        lastName: {
+                            "$regex": filter,
+                            $options: "i" // case-insensitive
+                        }
+                    }
+                ]
             }
-        }, {
-            lastName: {
-                "$regex": filter,
-                $options: "i" // case-insensitive
-            }
-        }]
+        ]
     })
 
     res.json({
