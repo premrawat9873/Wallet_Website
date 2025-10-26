@@ -37,7 +37,10 @@ export default function DropdownButton({ user }) {
                    backdrop-blur-md border border-zinc-600 hover:bg-zinc-600 
                    transition-all duration-200"
       >
-        {user.firstName[0].toUpperCase() + user.firstName[1].toUpperCase()}
+        {user && user.firstName ? 
+          (user.firstName[0].toUpperCase() + user.firstName[1].toUpperCase())
+          : 'U'
+        }
 
         <svg
           className="ml-1 h-3 w-3 text-white"

@@ -1,12 +1,54 @@
-# React + Vite
+Currently Building 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+💳 Wallet Website (with Fake Money for Testing)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A simple wallet web application built for testing and learning purposes.
+Users can sign up, log in, auto-login with JWT, and perform secure wallet transactions with MongoDB transaction support ensuring atomicity and consistency.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+🚀 Features
+
+🔑 User Authentication
+
+Signup with email & password
+
+Login with JWT authentication
+
+Auto-login with stored JWT (persistent sessions)
+
+
+💰 Wallet System
+
+Fake money balance for each user
+
+Secure credit & debit transactions
+
+MongoDB transactions ensure atomicity (all-or-nothing updates)
+
+
+🔒 Security
+
+JWT-based authentication
+
+Password hashing with bcrypt
+
+Secure transaction processing
+
+
+🛠 Tech Stack
+
+Backend: Node.js, Express.js
+
+Database: MongoDB (with transactions)
+
+Auth: JWT (JSON Web Tokens)
+
+Frontend: React 
+
+How to run
+Step 1 : Copy the repo
+Step 2 : npm install (in both files)
+Step 3 : run npm run dev
